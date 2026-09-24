@@ -1,0 +1,5 @@
+package repasojava.model;
+
+public enum estadoEvento {
+	PENDIENTE, PROGRAMADO, CANCELADO, FINALIZADO, APLAZADO;
+}

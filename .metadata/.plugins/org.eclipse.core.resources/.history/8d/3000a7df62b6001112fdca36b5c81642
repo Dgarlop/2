@@ -1,0 +1,12 @@
+package repasojava.ejercicio2.exceptions;
+
+public class BibliotecaException {
+
+	public BibliotecaException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
+}

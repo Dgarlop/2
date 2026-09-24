@@ -1,0 +1,20 @@
+package repasojava.model;
+
+import java.util.List;
+
+public class Concierto {
+	
+	private String artistaPrincipal;
+	private String[] invitados;
+	public Concierto(String artistaPrincipal) {
+		super();
+		int numInvitados = 0;
+		this.artistaPrincipal = artistaPrincipal;
+		invitados= new String[10];
+		numInvitados++;
+	}
+	
+	
+	
+
+}

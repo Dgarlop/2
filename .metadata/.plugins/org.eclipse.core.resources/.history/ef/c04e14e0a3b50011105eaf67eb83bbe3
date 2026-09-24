@@ -1,0 +1,5 @@
+package repasojava.model;
+
+public class EventoDeportivo {
+
+}

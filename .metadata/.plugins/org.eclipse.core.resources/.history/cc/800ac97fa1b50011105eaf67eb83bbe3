@@ -1,0 +1,11 @@
+package repasojava.model;
+
+import java.util.List;
+
+public class Conciertos {
+	
+	private String artistaPrincipal;
+	private String[] invitados;
+	
+
+}

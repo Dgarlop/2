@@ -1,0 +1,23 @@
+//*package repasojava;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+
+public class dia1 {
+	public static void main (String[] args) throws SQLException {
+		float resultado = 0; 
+		
+		try {
+			throw new FileNotFoundException("lanzo la excepcion controlada");
+			//resultado = 100/0;
+			//System.out.print("Detrás de dividir por 0");
+		}
+		catch(ArithmeticException | FileNotFoundException e) {
+			System.out.print("Dentro del catch");
+		} 
+		throw new SQLException("lanzo la excepcion sql");
+		//System.out.print(resultado);
+	}
+
+}
+*//
