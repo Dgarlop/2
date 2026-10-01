@@ -1,0 +1,7 @@
+2026-10-01 09:55:03.961 [main] ERROR Archivos.Boletin.Ejercicio1 - La ruta no existe
+2026-10-01 09:55:03.963 [main] ERROR Archivos.Boletin.Ejercicio1 - Error al crear fichero:null
+2026-10-01 09:57:03.024 [main] DEBUG Archivos.Boletin.Ejercicio1 - Creado exitosamente
+2026-10-01 09:57:16.672 [main] ERROR Archivos.Boletin.Ejercicio1 - La ruta no existe
+2026-10-01 09:57:16.674 [main] ERROR Archivos.Boletin.Ejercicio1 - Error al crear fichero:null
+2026-10-01 09:57:16.674 [main] DEBUG Archivos.Boletin.Ejercicio1 - Creado exitosamente
+2026-10-01 10:01:32.145 [main] ERROR Archivos.Boletin.Ejercicio1 - Error al crear fichero:No existe el directorio

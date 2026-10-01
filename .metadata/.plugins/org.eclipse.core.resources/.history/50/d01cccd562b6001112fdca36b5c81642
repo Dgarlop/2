@@ -1,5 +1,0 @@
-package repasojava.ejercicio2.exceptions;
-
-public class BibliotecaException {
-
-}

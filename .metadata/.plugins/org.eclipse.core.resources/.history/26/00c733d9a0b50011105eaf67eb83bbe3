@@ -1,7 +1,0 @@
-package repasojava.model;
-
-public class Conciertos {
-	
-	String artistaPrincipal;
-
-}

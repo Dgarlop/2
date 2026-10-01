@@ -1,5 +1,0 @@
-package repasojava.model;
-
-public interface estadoEvento {
-
-}
