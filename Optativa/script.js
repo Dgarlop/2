@@ -93,6 +93,21 @@ while (opcion == "si" || cantidad == 0 || cantidad >= 120) {
 
 document.write("<h1>" + "Gracias por jugar! Su cantidad final es: " + cantidad + "</h1>");
 */
-//Ejercicio 9
+//Ejercicio 9 Y 10
 
+var entrada = prompt("Ingrese una lista de nombres separados por comas: ");
+var lista_nombres = entrada.split(',');
 
+for (i in lista_nombres) {
+    document.write("<h1>" + "Saludos, " + lista_nombres[i] + "!" + "</h1>");
+}
+
+document.write("<p>Número de personas: " + lista_nombres.length + "</p>");
+document.write("<p>Primera persona: " + lista_nombres[0] + "</p>");
+document.write("<p>Última persona: " + lista_nombres[lista_nombres.length - 1] + "</p>");
+
+lista_nombres.sort();
+console.log(lista_nombres);
+
+lista_nombres.reverse();
+console.log(lista_nombres);

@@ -1,0 +1,8 @@
+nombre = input("Ingrese su nombre: ").strip()
+minuscula = nombre.lower()
+mayuscula = nombre.upper()
+longitud = len(nombre)
+print(f"Nombre sin espacios: {nombre}")
+print(f"Nombre en minúsculas: {minuscula}")
+print(f"Nombre en mayúsculas: {mayuscula}")
+print(f"Longitud del nombre: {longitud} caracteres")  

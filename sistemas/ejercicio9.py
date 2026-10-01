@@ -1,0 +1,5 @@
+nombre = input("Ingrese el nombre: ")
+apellidos = input("Ingrese el apellidos: ")
+email = input("Ingrese el email: ")
+ciudad = input("Ingrese la ciudad: ")
+print(f"----- CLIENTE ----- \n Nombre: {nombre} \n Apellidos: {apellidos} \n Email: {email} \n Ciudad: {ciudad}")
