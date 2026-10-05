@@ -17,7 +17,7 @@ clientes = [
 ]
 
 Email = input("Introduce un email: ")
-clienteEncontrado = None
+
 
 for cliente in clientes:
     if cliente["email"] == Email:
