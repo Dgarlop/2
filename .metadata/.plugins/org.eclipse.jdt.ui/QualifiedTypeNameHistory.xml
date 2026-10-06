@@ -11,5 +11,7 @@
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="repasojava.model.estadoEvento"/>
     <fullyQualifiedTypeName name="java.util.Scanner"/>
+    <fullyQualifiedTypeName name="Archivos.Boletin.Ejercicio2"/>
     <fullyQualifiedTypeName name="Archivos.Boletin.RutaNoValidaException"/>
+    <fullyQualifiedTypeName name="java.lang.ProcessBuilder"/>
 </qualifiedTypeNameHistroy>

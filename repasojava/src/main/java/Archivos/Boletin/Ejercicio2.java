@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import Archivos.ejercicio1;
 
 public class Ejercicio2 {
-	private static final Logger logger = LogManager.getLogger(ejercicio1.class);
+	private static final Logger logger = LogManager.getLogger(Ejercicio2.class);
 
 	public void mostrarDirectorio(String ruta) throws RutaNoValidaException {
 		File directorio = new File(ruta);
