@@ -12,16 +12,34 @@
         <input type="text" id="nombre"> 
         <label for="apellido">Apellido:</label> 
         <input type="text" id="apellido"> 
+        <button id="boton" onclick="correcto()">Correcto</button>
+        <button id="boton" onclick="incorrecto()">Incorrecto</button>
     </div> 
      
     <p id="saludo"></p> 
-    <ul id="lista"> Lista
-        <lo> 
-            <li>hola</li>
-            <li>hola</li>
-        </lo>
-        
+    <ul id ="lista" onclick="mostrar()">Lista
+        <li>Elemento A</li>
+        <li>Elemento B</li>
     </ul>
+    
+
+    <p>Ciudad: <span id="ciudad"></span></p> 
+    <p>Gastos de envío: <span id="gastos" ></span></p>
+    <h1>Fecha de envío: <span id="fecha"></span></h1>
+    <button id="cambiar" onclick="cambiar()">Cambiar</button>
+    
+    <div id="ejercicio6">
+        <p>JavaScript es un lenguaje de programación que los desarrolladores utilizan para hacer páginas web interactivas. Desde actualizar fuentes de redes sociales a mostrar animaciones y mapas interactivos, las funciones de JavaScript pueden mejorar la experiencia del usuario de un sitio web. Como lenguaje de scripting del lado del servidor, se trata de una de las principales tecnologías de la World Wide Web. Por ejemplo, al navegar por Internet, en cualquier momento en el que vea un carrusel de imágenes, un menú desplegable “click-to-show” (clic para mostrar), o cambien de manera dinámica los elementos de color en una página web, estará viendo los efectos de JavaScript.</p>
+        <p>Anteriormente, las páginas web eran estáticas, similares a las páginas de un libro. Una página estática mostraba principalmente información en un diseño fijo y no todo aquello que esperamos de un sitio web moderno. JavaScript surgió como una tecnología del lado del navegador para hacer que las aplicaciones web fueran más dinámicas. Por medio de JavaScript, los navegadores eran capaces de responder a la interacción de los usuarios y cambiar la distribución del contenido en la página web.</p>
+        <p>A medida que el lenguaje evolucionó, los desarrolladores de JavaScript establecieron bibliotecas, marcos y prácticas de programación y comenzaron a utilizarlo fuera de los navegadores web. En la actualidad, puede utilizar JavaScript para el desarrollo tanto del lado del cliente como del lado del servidor. En las siguientes subsecciones se presentan algunos casos de uso comunes:</p>
+    </div>
+    <span id = "mostrar" onclick="mostrarInfo()">Mostrar mas</span>
+    <h3 id="aumentarLetra" onclick="aumentarLetra()">Aumentar letra</h3>
+    <h3 id="disminuirLetra" onclick="disminuirLetra()">Disminuir letra</h3>
+    <h1>Lista de Compra</h1>
+    <ul id = "ListaCompra">
+    </ul>
+    <button id="cambiar" onclick="añadir()">añadir</button>
     <script src="script.js"></script>
     </body>
 </html>
