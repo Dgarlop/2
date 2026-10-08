@@ -1,6 +1,7 @@
 package Archivos.Boletin;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +15,12 @@ public class Ejercicio3 {
         if (creado) {
         	logger.debug("Directorio creado." + miDirectorio.getAbsolutePath());
         }
+        try {
         File lectura = new File(miDirectorio, "lectura.txt");
+		lectura.createNewFile();	
         logger.debug("Archivo lectura.txt creado");
         File normal = new File(miDirectorio, "normal.txt");
+        normal.createNewFile();
         logger.debug("Archivo normal.txt creado");
 
         boolean marcado = lectura.setReadOnly();
@@ -54,6 +58,10 @@ public class Ejercicio3 {
         } else {
         	logger.debug("El directorio está vacío.");
         }
+        }
+        catch (IOException e) {
+			e.printStackTrace();
+		}
 
     }
 }
