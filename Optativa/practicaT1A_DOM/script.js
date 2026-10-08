@@ -135,27 +135,68 @@ function disminuirLetra(){
 }
     */
 //Ejercicio8y9
+/*
 var lista = document.getElementById("ListaCompra");
 var producto = document.createElement("li");
 var boton1 = document.createElement("button");
 var boton2 = document.createElement("button");
 function añadir() {
     var texto = prompt("Introduce el producto");
-    producto.textContent = texto;
-    //Creacion de botones
-    
+    producto.textContent = texto; 
     boton1.textContent = "Si";
-    boton1.onclick = "si()";
-    
     boton2.textContent = "No";
     producto.appendChild(boton1);
     producto.appendChild(boton2);
     lista.appendChild(producto); 
+    boton1.onclick = si;
+    boton2.onclick = no;
 }
 function si(){
     producto.style.color = "green";
+    producto.style.fontStyle = "italic";
+    producto.style.fontWeight = "normal";
 }
 function no(){
     producto.style.color = "red";
+    producto.style.fontWeight = "bold";
+    producto.style.fontStyle = "normal";
 }
-    
+    */
+//Ejercicio10
+const productos = [
+    { id: 1, nombre: 'Patata', precio: 1, imagen: 'patata.jpg'}, 
+    { id: 2, nombre: 'Cebolla', precio: 1.2, imagen: 'cebolla.jpg' },  
+    { id: 3, nombre: 'Calabacin', precio: 2.1, imagen: 'calabacin.jpg' },  
+    { id: 4, nombre: 'Fresas', precio: 0.6, imagen: 'fresas.jpg'}
+];
+var lista = document.createElement("ul");
+for(i in productos){
+    var producto = document.createElement("li");
+    var nuevoProducto = productos[i];
+    producto.textContent = nuevoProducto.id + " - " +
+                           nuevoProducto.nombre + " - " +
+                           nuevoProducto.precio + " €";
+    var imagen = document.createElement("img");
+    imagen.src = nuevoProducto.imagen;
+    imagen.width = 100;
+    producto.appendChild(imagen);
+    var boton = document.createElement("button");
+    boton.textContent = "Disponible";
+    boton.classList.add("disabled");
+    boton.onclick = estado;
+    producto.appendChild(boton);
+    lista.appendChild(producto);
+}
+document.body.appendChild(lista);
+
+function estado(){
+    if (this.style.backgroundColor == "gray") {
+        this.style.backgroundColor = "green";
+        this.style.color = "white";
+
+        } else {
+            this.style.backgroundColor = "gray";
+            this.style.color = "white";
+
+        }
+}
