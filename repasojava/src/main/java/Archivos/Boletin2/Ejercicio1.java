@@ -1,4 +1,4 @@
-package Archivos.Boletin2;
+/*package Archivos.Boletin2;
 
 import java.io.IOException;
 
@@ -25,4 +25,4 @@ public class Ejercicio1 {
 
 	}
 
-}
+}*/
