@@ -32,6 +32,7 @@
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_SKIP_DOT_FOLDERS" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\alumno\Desktop\2\Clase2"/>
 			<item value="C:\Users\alumno\Desktop\2º"/>
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
