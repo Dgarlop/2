@@ -2,15 +2,21 @@ package psp.Boletin2.Ejercicio2.Repositorios;
 
 import java.io.IOException;
 import java.lang.classfile.attribute.InnerClassesAttribute;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LanzadorAnalizadorTemperatura {
 	public static void main(String[] args) throws IOException, InterruptedException {
+		LanzadorAnalizadorTemperatura lanz = new LanzadorAnalizadorTemperatura();
 		String rutaClasses = "target/classes";
 		String pack = "psp.Boletin2.Ejercicio2.Models.AnalizadorTemperaturas";
 		String ruta = "src/main/resources/Temperaturas";
 		int[] umbrales = {10, 20, 25, 30, 35};	
-		for(int umbral:umbrales) {
+		// List<Integer> dias = new ArrayList<>();
+		for(int umbral:umbrales) { 
+			//dias.add(lanz.ejecuta(Integer.toString(umbral), ruta, rutaClasses, pack));
 			ejecuta(Integer.toString(umbral), ruta, rutaClasses, pack);
+
 		}
 		
 	}

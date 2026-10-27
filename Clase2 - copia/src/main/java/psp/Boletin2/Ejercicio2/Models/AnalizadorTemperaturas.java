@@ -14,23 +14,24 @@ public class AnalizadorTemperaturas {
 	public static void main(String[] args) throws IOException {
 	    AnalizadorTemperaturas analizador = new AnalizadorTemperaturas();
 	    
-
 	    try {
+	    	
 	    	int valor = Integer.parseInt(args[0]);
 	    	String ruta = args[1];
 	        int resultado = analizador.analizador(valor, ruta);
 	        System.out.println("Dias con temperatura superior a " + valor+ ": " + resultado);
+	        
 	        try (BufferedWriter bf = new BufferedWriter(new FileWriter(valor + ".txt"))){
 	        	bf.write(Integer.toString(resultado));
 	        }
-			
 	    } catch (FileNotFoundException e) {
 	        System.out.println("No se encuentra el fichero.");
 	    }
+	    
 	}
 
-    public int analizador(int valor, String ruta) throws FileNotFoundException {
-        int dias = 0;
+    public Integer analizador(int valor, String ruta) throws FileNotFoundException {
+    	Integer dias = 0;
         Scanner scan = null;
          File archivo = new File(ruta);
 
