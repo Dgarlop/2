@@ -1,38 +1,45 @@
+
 package com.example.meteolocal
 
-import androidx.compose.material3.OutlinedTextField
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Arrangement
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.meteolocal.Network.OpenMeteoClient
 import com.example.meteolocal.ui.theme.MeteoLocalTheme
-import androidx.compose.material3.Button
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+
         setContent {
             MeteoLocalTheme {
                 MeteoLocalApp()
@@ -40,77 +47,227 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun MeteoLocalApp() {
+
     var localidad by remember {
         mutableStateOf("")
     }
+
     var mensaje by remember {
         mutableStateOf("Introduce una localidad")
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "MeteoLocal",
-            style = MaterialTheme.typography.headlineMedium
-        )
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+    var mostrarDialogoLimpiar by remember {
+        mutableStateOf(false)
+    }
 
-        Text(
-            text = "Consulta el tiempo de cualquier localidad"
+    var mensajeUbicacion by remember {
+        mutableStateOf(
+            "No se ha solicitado autorización todavía."
         )
+    }
 
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
-        OutlinedTextField(
-            value = localidad,
-            onValueChange = { nuevoValor: String ->
-                localidad = nuevoValor
-            },
-            label = {
-                Text("Localidad")
-            },
-            singleLine = true
-        )
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+    val context = LocalContext.current
 
-        Button(
-            onClick = {
-                if (localidad.isBlank()) {
-                    mensaje = "Introduce una localidad"
-                } else {
-                    mensaje = "Consulta preparada para: $localidad"
-                }
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { concedido: Boolean ->
+
+            if (concedido) {
+                mensajeUbicacion =
+                    "Permiso de ubicación concedido."
+            } else {
+                mensajeUbicacion =
+                    "No se ha autorizado la ubicación. " +
+                            "Puedes introducir una localidad manualmente."
             }
-        ) {
-            Text("Consultar")
         }
 
-    }
-}
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    val onUsarUbicacion = {
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MeteoLocalTheme {
-        Greeting("Android")
+        val permisoConcedido =
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+
+        if (permisoConcedido) {
+            mensajeUbicacion =
+                "Permiso de ubicación ya concedido."
+        } else {
+            permissionLauncher.launch(
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        }
+    }
+    var resultadoRed by remember {
+        mutableStateOf("Aún no se ha realizado ninguna consulta real.")
+    }
+    val scope = rememberCoroutineScope()
+    val onProbarConexion: () -> Unit = {
+        resultadoRed = "Consultando Open-Meteo..."
+        scope.launch {
+            try {
+                val respuesta = OpenMeteoClient.meteoApi
+                    .obtenerTiempoActual(
+                        latitud = 37.39,
+                        longitud = -5.99
+                    )
+                resultadoRed = "Temperatura actual en Sevilla: " +
+                        "${respuesta.current.temperature_2m} °C"
+            } catch (e: Exception) {
+                resultadoRed = "No se ha podido realizar la consulta."
+            }
+        } // Cierra scope.launch
+    } // Cierra onProbarConexion
+    val navController = rememberNavController()
+
+    val backStackEntry by
+    navController.currentBackStackEntryAsState()
+
+    val rutaActual =
+        backStackEntry?.destination?.route
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+
+                NavigationBarItem(
+                    selected = rutaActual == "consulta",
+                    onClick = {
+                        navController.navigate("consulta") {
+                            launchSingleTop = true
+                        }
+                    },
+                    icon = {
+                        Text("C")
+                    },
+                    label = {
+                        Text("Consulta")
+                    }
+                )
+
+                NavigationBarItem(
+                    selected = rutaActual == "favoritos",
+                    onClick = {
+                        navController.navigate("favoritos") {
+                            launchSingleTop = true
+                        }
+                    },
+                    icon = {
+                        Text("F")
+                    },
+                    label = {
+                        Text("Favoritos")
+                    }
+                )
+
+                NavigationBarItem(
+                    selected = rutaActual == "configuracion",
+                    onClick = {
+                        navController.navigate("configuracion") {
+                            launchSingleTop = true
+                        }
+                    },
+                    icon = {
+                        Text("A")
+                    },
+                    label = {
+                        Text("Ajustes")
+                    }
+                )
+            }
+        }
+    ) { innerPadding ->
+
+        NavHost(
+            navController = navController,
+            startDestination = "consulta",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+
+            composable("consulta") {
+
+                ConsultaScreen(
+                    localidad = localidad,
+                    mensaje = mensaje,
+                    mensajeUbicacion = mensajeUbicacion,
+
+                    onLocalidadChange = { nuevoValor: String ->
+                        localidad = nuevoValor
+                    },
+
+                    onConsultar = {
+                        mensaje =
+                            if (localidad.isBlank()) {
+                                "Introduce una localidad"
+                            } else {
+                                "Consulta preparada para: $localidad"
+                            }
+                    },
+
+                    onSolicitarLimpiar = {
+                        mostrarDialogoLimpiar = true
+                    },
+
+                    onUsarUbicacion = onUsarUbicacion,
+                    resultadoRed = resultadoRed,
+                    onProbarConexion = onProbarConexion
+                )
+
+            }
+
+            composable("favoritos") {
+                FavoritosScreen()
+            }
+
+            composable("configuracion") {
+                ConfiguracionScreen()
+            }
+        }
+
+        if (mostrarDialogoLimpiar) {
+
+            AlertDialog(
+                onDismissRequest = {
+                    mostrarDialogoLimpiar = false
+                },
+
+                title = {
+                    Text("Limpiar consulta")
+                },
+
+                text = {
+                    Text(
+                        "¿Deseas borrar la localidad introducida?"
+                    )
+                },
+
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            localidad = ""
+                            mensaje = "Introduce una localidad"
+                            mostrarDialogoLimpiar = false
+                        }
+                    ) {
+                        Text("Sí, limpiar")
+                    }
+                },
+
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            mostrarDialogoLimpiar = false
+                        }
+                    ) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
     }
 }
