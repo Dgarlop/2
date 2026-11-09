@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videojuegos Clásicos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>La Evolución de los Videojuegos Clásicos</h1>
+    <div id="content">
+        <p id="description">Los videojuegos clásicos han evolucionado enormemente desde sus inicios.</p>
+        <button id="changeDescription" onclick="cambiarDescripcion">Cambiar Descripción</button>
+        <img id="mainImage" src="game1.jpg" alt="Imagen de videojuego clásico" >
+        <button id="toggleImage">Alternar Imagen</button>
+        <ul id="quotes">
+            <li>"Donkey Kong fue el inicio de Mario." - Shigeru Miyamoto</li>
+            <li>"Pac-Man no necesita una historia para ser divertido." - Toru Iwatani</li>
+        </ul>
+        <button id="addQuote">Añadir Cita</button>
+        <button id="removeQuote">Eliminar Última Cita</button>
+        <button id="highlightQuote">Resaltar Última Cita</button>
+        <div>
+            <input type="text" id="newQuoteText" placeholder="Nueva cita">
+            <button id="addCustomQuote">Añadir Cita Personalizada</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
