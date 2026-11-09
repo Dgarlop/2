@@ -1,7 +1,7 @@
 
-public class Hilo extends Thread {
+public class HiloPR extends Thread {
 	
-	public Hilo(String nombre) {
+	public HiloPR(String nombre) {
 		super(nombre);
 	}
 	
