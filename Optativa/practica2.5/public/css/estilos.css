@@ -1,0 +1,73 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #f4f6f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- Cabecera y menú ---- */
+header {
+  background: #1f3a5f;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+header .marca { margin: 0; font-size: 1.3rem; }
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1.2rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+nav a:hover { background: #3d6399; }
+
+/* ---- Contenido ---- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
+
+h1 { color: #1f3a5f; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid #e1e5ea; }
+th { background: #dde6f2; }
+
+.total { font-weight: bold; }
+.vacio { padding: 1rem; background: #fff3cd; border-left: 4px solid #e0a800; }
+
+/* ---- Estado de los libros ---- */
+.disponible { color: #1e7e34; font-weight: bold; }
+.prestado { color: #c82333; font-weight: bold; }
+.clasico { color: #6c757d; font-style: italic; }
+
+/* ---- Pie ---- */
+footer {
+  background: #1f3a5f;
+  color: #cfd8e6;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
