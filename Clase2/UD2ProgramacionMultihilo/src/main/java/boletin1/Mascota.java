@@ -1,4 +1,4 @@
-package boletin1.ejercicio4;
+package boletin1;
 
 public class Mascota implements Runnable {
     private String nombre;
@@ -15,7 +15,10 @@ public class Mascota implements Runnable {
 
     @Override
     public void run() {
-        comer();
+    	while(!Thread.currentThread().isInterrupted()) {
+    		comer();
+    	}
+        
     }
 
     public void comer() {

@@ -1,4 +1,4 @@
-package boletin1;
+
 
 public class HiloEjemplo extends Thread{
 	String nombreHilo;
