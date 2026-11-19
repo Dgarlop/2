@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.meteolocal.Network.ResultadoMeteo
 
 @Composable
 fun ConsultaScreen(
@@ -37,10 +39,14 @@ fun ConsultaScreen(
     onConsultar: () -> Unit,
     onSolicitarLimpiar: () -> Unit,
     onUsarUbicacion: () -> Unit,
-    resultadoRed: String,
-    onProbarConexion: () -> Unit
+    cargando: Boolean,
+    error: String?,
+    resultado: ResultadoMeteo?,
+    //unidadTemperatura: String
+    //onAgregarFavorito: () -> Unit
 ) {
-
+    // Aquí irá la interfaz que antes estaba
+    // dentro de MeteoLocalApp().
     var menuAbierto by remember {
         mutableStateOf(false)
     }
@@ -56,18 +62,13 @@ fun ConsultaScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Text(
             text = "MeteoLocal",
             style = MaterialTheme.typography.headlineMedium
         )
-
         Box {
-
             TextButton(
-                onClick = {
-                    menuAbierto = true
-                }
+                onClick = { menuAbierto = true }
             ) {
                 Text("Más")
             }
@@ -78,7 +79,6 @@ fun ConsultaScreen(
                     menuAbierto = false
                 }
             ) {
-
                 DropdownMenuItem(
                     text = {
                         Text("Acerca de MeteoLocal")
@@ -91,108 +91,152 @@ fun ConsultaScreen(
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Consulta el tiempo de cualquier localidad"
+            text = mensaje
         )
 
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = localidad,
             onValueChange = { nuevoValor: String ->
                 onLocalidadChange(nuevoValor)
             },
-            label = {
-                Text("Localidad")
-            },
+            label = { Text("Localidad") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
 
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
 
-            Button(
-                onClick = onConsultar
-            ) {
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+// Botones Consultar y Limpiar, en horizontal
+        Row {
+            Button(onClick = onConsultar, enabled = !cargando) {
                 Text("Consultar")
             }
 
-            Spacer(
-                modifier = Modifier.width(12.dp)
-            )
+            Spacer(modifier = Modifier.width(12.dp))
 
-            Button(
-                onClick = onSolicitarLimpiar
-            ) {
+            Button(onClick = onSolicitarLimpiar) {
                 Text("Limpiar")
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
+// Botón de ubicación, debajo de los anteriores
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = mensaje
-        )
-
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
-
-        Button(
-            onClick = onUsarUbicacion
-        ) {
+        Button(onClick = onUsarUbicacion) {
             Text("Usar mi ubicación")
         }
+
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onProbarConexion) {
-            Text("Probar conexión (Sevilla)")
+
+        Text(text = mensajeUbicacion)
+
+
+// ========================================
+// NUEVO CÓDIGO DE METEOLOCAL 0.5
+// PASO 15
+// ========================================
+
+
+
+// ========================================
+// FIN DEL CÓDIGO NUEVO
+// ========================================
+
+
+        val datos = resultado
+        when {
+            cargando -> {
+                CircularProgressIndicator()
+                Spacer(Modifier.height(8.dp))
+                Text("Consultando...")
+            }
+            error != null -> {
+                Text(text = error.orEmpty())
+            }
+
+            datos != null -> {
+                Text(
+                    text = datos.localidad +
+                            (datos.pais?.let { ", $it" } ?: ""),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                /*val simbolo =
+                    if (unidadTemperatura == "F") "°F"
+                    else "°C"
+
+                val temperaturaMostrada =
+                    convertirTemperatura(
+                        datos.temperatura,
+                        unidadTemperatura
+                    )
+
+                val sensacionMostrada =
+                    convertirTemperatura(
+                        datos.sensacion,
+                        unidadTemperatura
+                    )
+
+                Text(
+                    text = datos.localidad +
+                            (datos.pais?.let { ", $it" } ?: ""),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = "Temperatura: %.1f %s".format(
+                        temperaturaMostrada,
+                        simbolo
+                    )
+                )
+
+                Text(
+                    text = "Sensación: %.1f %s".format(
+                        sensacionMostrada,
+                        simbolo
+                    )
+                )*/
+                Text("Temperatura: ${datos.temperatura} °C")
+                Text("Sensación: ${datos.sensacion} °C")
+                Text("Humedad: ${datos.humedad} %")
+                Text("Viento: ${datos.viento} km/h")
+                Text("Código meteorológico: ${datos.codigo}")
+                /*
+                Text("Humedad: ${datos.humedad} %")
+                Text("Viento: ${datos.viento} km/h")
+                Text("Código meteorológico: ${datos.codigo}")
+                Spacer(Modifier.height(12.dp))
+                Button(onClick = onAgregarFavorito) {
+                    Text("★ Añadir a favoritos")
+                }*/
+            }
+            else -> {
+                Text("Introduce una localidad y pulsa Consultar.")
+            }
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(text = resultadoRed)
-
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
-
-        Text(
-            text = mensajeUbicacion
-        )
 
     }
-
     if (mostrarAcercaDe) {
-
         AlertDialog(
             onDismissRequest = {
                 mostrarAcercaDe = false
             },
-
             title = {
                 Text("MeteoLocal")
             },
-
             text = {
                 Text(
                     "Aplicación desarrollada durante " +
                             "la Unidad 2 de PMDM."
                 )
             },
-
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -204,4 +248,5 @@ fun ConsultaScreen(
             }
         )
     }
+
 }

@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.meteolocal.Network.OpenMeteoClient
+import com.example.meteolocal.Network.ResultadoMeteo
 import com.example.meteolocal.ui.theme.MeteoLocalTheme
 import kotlinx.coroutines.launch
 
@@ -103,26 +104,58 @@ fun MeteoLocalApp() {
             )
         }
     }
-    var resultadoRed by remember {
-        mutableStateOf("Aún no se ha realizado ninguna consulta real.")
-    }
     val scope = rememberCoroutineScope()
-    val onProbarConexion: () -> Unit = {
-        resultadoRed = "Consultando Open-Meteo..."
-        scope.launch {
-            try {
-                val respuesta = OpenMeteoClient.meteoApi
-                    .obtenerTiempoActual(
-                        latitud = 37.39,
-                        longitud = -5.99
-                    )
-                resultadoRed = "Temperatura actual en Sevilla: " +
-                        "${respuesta.current.temperature_2m} °C"
-            } catch (e: Exception) {
-                resultadoRed = "No se ha podido realizar la consulta."
+    var cargando by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var resultado by remember {
+        mutableStateOf<ResultadoMeteo?>(null)
+    }
+
+    val onConsultar: () -> Unit = {
+        val texto = localidad.trim()
+        if (texto.isBlank()) {
+            error = "Introduce una localidad."
+            resultado = null
+        } else {
+            scope.launch {
+                cargando = true
+                error = null
+                resultado = null
+                try {
+                    val geo = OpenMeteoClient.geocodingApi
+                        .buscarLocalidad(texto)
+                    val lugar = geo.results?.firstOrNull()
+                    if (lugar == null) {
+                        error = "No se ha encontrado esa localidad."
+                    } else {
+                        val meteo = OpenMeteoClient.meteoApi
+                            .obtenerTiempoActual(
+                                latitud = lugar.latitude,
+                                longitud = lugar.longitude
+                            )
+                        resultado = ResultadoMeteo(
+                            localidad = lugar.name,
+                            pais = lugar.country,
+                            temperatura = meteo.current.temperature_2m,
+                            sensacion = meteo.current.apparent_temperature,
+                            humedad = meteo.current.relative_humidity_2m,
+                            codigo = meteo.current.weather_code,
+                            viento = meteo.current.wind_speed_10m
+                        )
+                    }
+                } catch (e: java.io.IOException) {
+                    error = "No se ha podido conectar con Internet."
+                } catch (e: retrofit2.HttpException) {
+                    error = "El servidor ha devuelto un error HTTP."
+                } catch (e: Exception) {
+                    error = "Se ha producido un error inesperado."
+                } finally {
+                    cargando = false
+                }
             }
-        } // Cierra scope.launch
-    } // Cierra onProbarConexion
+        }
+    }
+
     val navController = rememberNavController()
 
     val backStackEntry by
@@ -195,27 +228,17 @@ fun MeteoLocalApp() {
                     localidad = localidad,
                     mensaje = mensaje,
                     mensajeUbicacion = mensajeUbicacion,
-
                     onLocalidadChange = { nuevoValor: String ->
                         localidad = nuevoValor
                     },
-
-                    onConsultar = {
-                        mensaje =
-                            if (localidad.isBlank()) {
-                                "Introduce una localidad"
-                            } else {
-                                "Consulta preparada para: $localidad"
-                            }
-                    },
-
+                    onConsultar = onConsultar,
                     onSolicitarLimpiar = {
                         mostrarDialogoLimpiar = true
                     },
-
                     onUsarUbicacion = onUsarUbicacion,
-                    resultadoRed = resultadoRed,
-                    onProbarConexion = onProbarConexion
+                    cargando = cargando,
+                    error = error,
+                    resultado = resultado
                 )
 
             }
@@ -251,6 +274,9 @@ fun MeteoLocalApp() {
                         onClick = {
                             localidad = ""
                             mensaje = "Introduce una localidad"
+                            resultado = null
+                            error = null
+                            cargando = false
                             mostrarDialogoLimpiar = false
                         }
                     ) {
